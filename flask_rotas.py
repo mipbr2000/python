@@ -22,9 +22,9 @@ def home():
             return "Erro ao criar motocicleta"
     
     if minha_nova_moto and minha_nova_moto.marca == "Honda":
-        return redirect(url_for("rota_honda", moto=minha_nova_moto))
+        return redirect(url_for("rota_honda", moto=json.dumps(minha_nova_moto.__dict__)))
     else:
-        return redirect(url_for("rota_yamaha", moto=minha_nova_moto))
+        return redirect(url_for("rota_yamaha", moto=json.dumps(minha_nova_moto.__dict__)))
 
 
 @app.route("/cria_motocicleta", methods=["GET"])
@@ -35,14 +35,21 @@ def cria_motocicleta():
 
 @app.route("/honda")
 def rota_honda():
-    moto = request.args.get("moto")
-    return f"Esta é uma nova rota para motos Honda. {moto}"
+    moto = json.loads(request.args.get("moto"))
+    marca = moto["marca"]
+    modelo = moto["modelo"]
+    cilindrada = moto["cilindrada"]
+    return f"Esta é uma nova rota para motos HONDA. Marca: {marca}, Modelo: {modelo}, Cilindrada: {cilindrada}."
+
 
 
 @app.route("/yamaha")
 def rota_yamaha():
-    moto = request.args.get("moto")
-    return f"Esta é uma nova rota para motos Yamaha. {moto}"
+    moto = json.loads(request.args.get("moto"))
+    marca = moto["marca"]
+    modelo = moto["modelo"]
+    cilindrada = moto["cilindrada"]
+    return f"Esta é uma nova rota para motos YAMAHA. Marca: {marca}, Modelo: {modelo}, Cilindrada: {cilindrada}."
 
 
 if __name__ == "__main__":
