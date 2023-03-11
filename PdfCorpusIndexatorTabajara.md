@@ -43,6 +43,32 @@ CREATE TABLE pdf_files (
 
 1. Execute o script e verifique se os dados foram inseridos corretamente na tabela.
 
+# Aqui o script de indexação
+
+```python
+import os
+import mysql.connector
+from pdfminer.high_level import extract_text
+
+mydb = mysql.connector.connect(
+  host="127.0.0.1",
+  user="pdftabajara",
+  password="pdftabajara",
+  database="pdftabajara"
+)
+mycursor = mydb.cursor()
+
+pdf_dir = '/home/username/Documents/Revista80sGames'
+
+for filename in os.listdir(pdf_dir):
+    if filename.endswith('.pdf'):
+        text = extract_text(os.path.join(pdf_dir, filename))
+        sql = "INSERT INTO pdf_files (file_name, text) VALUES (%s, %s)"
+        val = (filename, text)
+        mycursor.execute(sql, val)
+        mydb.commit()
+```
+
 ## Buscando palavras em uma tabela
 
 Segue um exemplo de script em Python que busca por uma palavra em uma tabela MySQL com as colunas `filename` e `text`, retornando o nome do arquivo e a linha do texto contendo a palavra:
